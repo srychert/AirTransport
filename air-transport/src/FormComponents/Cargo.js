@@ -20,7 +20,6 @@ function Cargo({ array, cargo, typesOfCargo, cargoTemplate, index }) {
       <Stack direction="row" spacing={0}>
         <IconButton aria-label="add" color="success" onClick={() => array.insert(index, cargoTemplate())}
           sx={{
-            paddingRight: 0,
             "&:hover": {
               color: "success.dark",
             },
@@ -28,9 +27,8 @@ function Cargo({ array, cargo, typesOfCargo, cargoTemplate, index }) {
         >
           <AddCircleIcon />
         </IconButton>
-        <IconButton aria-label="delete" color="error" onClick={() => array.remove(index)}
+        <IconButton disabled={array.form.values.cargos.length == 1} aria-label="delete" color="error" onClick={() => array.remove(index)}
           sx={{
-            paddingLeft: 0,
             "&:hover": {
               color: "error.dark",
             },

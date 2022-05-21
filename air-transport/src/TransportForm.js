@@ -94,9 +94,17 @@ function TransportForm() {
             for (const [i, cargo] of cargos.entries()) {
               for (const [key, value] of Object.entries(cargo)) {
                 const fieldName = `cargos.${i}.${key}`
+                const keyName = key.charAt(0).toUpperCase() + key.slice(1)
                 if (!value) {
-                  errors[fieldName] = `${key.charAt(0).toUpperCase() + key.slice(1)} required`
+                  errors[fieldName] = `${keyName} required`
                 }
+
+                if (key === "weight") {
+                  if (value <= 0) {
+                    errors[fieldName] = `${keyName} can't be non-negative`
+                  }
+                }
+
               }
             }
           }
@@ -139,15 +147,9 @@ function TransportForm() {
                   name="cargos"
                   render={array => (
                     <div>
-                      {values.cargos && values.cargos.length > 0 ? (
-                        values.cargos.map((cargo, index) => (
-                          <Cargo array={array} cargo={cargo} index={index} typesOfCargo={typesOfCargo} cargoTemplate={cargoTemplate} key={index} />
-                        ))
-                      ) : (
-                        <Button variant="contained" color="primary" onClick={() => array.push(cargoTemplate())}>
-                          Add cargo
-                        </Button>
-                      )}
+                      {values.cargos.map((cargo, index) => (
+                        <Cargo array={array} cargo={cargo} index={index} typesOfCargo={typesOfCargo} cargoTemplate={cargoTemplate} key={index} />
+                      ))}
                     </div>
                   )}
                 />
@@ -158,7 +160,7 @@ function TransportForm() {
 
       </Formik>
       <ErrorDialog open={open} handleClose={handleClose} msg={msg} />
-    </Box>
+    </Box >
   )
 }
 
