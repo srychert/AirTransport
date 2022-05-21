@@ -3,6 +3,7 @@ import { Formik, Form, Field } from 'formik'
 import { React } from 'react'
 import MySelect from "./FormComponents/MySelect";
 import MyInput from "./FormComponents/MyInput";
+import SubmitButton from "./FormComponents/SubmitButton";
 import MyDate from "./FormComponents/MyDate";
 
 function TransportForm() {
@@ -64,6 +65,9 @@ function TransportForm() {
               </>
               <Grid item xs={size.xs} sm={size.sm} md={size.md} lg={size.lg} xl={size.xl}>
                 <Field name="shipping_date" type="date" component={MyDate} />
+              </Grid>
+              <Grid item xs={size.xs} sm={size.sm} md={size.md} lg={size.lg} xl={size.xl}>
+                <SubmitButton isSubmitting={isSubmitting} status={status} />
               </Grid>
             </Grid>
           </Form>
