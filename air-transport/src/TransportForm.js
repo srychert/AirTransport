@@ -90,12 +90,24 @@ function TransportForm() {
             }
           };
 
+          const validateCargos = (cargos) => {
+            for (const [i, cargo] of cargos.entries()) {
+              for (const [key, value] of Object.entries(cargo)) {
+                const fieldName = `cargos.${i}.${key}`
+                if (!value) {
+                  errors[fieldName] = `${key.charAt(0).toUpperCase() + key.slice(1)} required`
+                }
+              }
+            }
+          }
+
           for (const [key, value] of Object.entries(values)) {
             if (key === "documents") { continue }
             validationRequierd(key, value);
           }
 
           validateShippingDate(values.shipping_date)
+          validateCargos(values.cargos)
 
           return errors;
         }}
