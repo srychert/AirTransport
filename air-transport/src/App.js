@@ -1,5 +1,6 @@
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Container } from "@mui/material";
+import TransportForm from "./TransportForm";
 
 const theme = createTheme({
   palette: {
@@ -26,6 +27,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <Container>
+          <TransportForm />
         </Container>
       </div>
     </ThemeProvider>
