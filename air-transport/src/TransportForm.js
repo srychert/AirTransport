@@ -1,14 +1,18 @@
 import { Box, Grid } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
-import { React } from 'react'
+import { React, useState } from 'react'
 import MySelect from "./FormComponents/MySelect";
 import MyInput from "./FormComponents/MyInput";
 import SubmitButton from "./FormComponents/SubmitButton";
+import ErrorDialog from "./FormComponents/ErrorDialog";
 import MyDate from "./FormComponents/MyDate";
 
 function TransportForm() {
+  const [open, setOpen] = useState(false);
+  const [msg, setMsg] = useState("");
 
   const handleSubmit = (values, setStatus, setSubmitting) => {
+    handleClose();
     setStatus({
       sent: true,
       msg: "Success",
@@ -16,6 +20,14 @@ function TransportForm() {
     setSubmitting(false);
 
     console.log(values);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const airplanes = [
@@ -74,6 +86,7 @@ function TransportForm() {
         )}
 
       </Formik>
+      <ErrorDialog open={open} handleClose={handleClose} msg={msg} />
     </Box>
   )
 }
