@@ -76,6 +76,7 @@ function TransportForm() {
             airplane: "Airplane required",
             shipping_date: "Shipping date required",
             shipping_date_from_past: "Shipping date can't be from past",
+            shipping_date_wrong_day: "Shipping date can't be on weekend",
           };
 
           const validationRequierd = (key, value) => {
@@ -85,8 +86,15 @@ function TransportForm() {
           };
 
           const validateShippingDate = (date) => {
-            if (new Date(date).setHours(23, 59, 59, 59) < new Date()) {
+            let shipping_date = new Date(date)
+            shipping_date.setHours(23, 59, 59, 59)
+            const day = shipping_date.getDay()
+
+            if (shipping_date < new Date()) {
               errors.shipping_date = messages.shipping_date_from_past;
+            }
+            if (day == 0 || day == 6) {
+              errors.shipping_date = messages.shipping_date_wrong_day;
             }
           };
 
