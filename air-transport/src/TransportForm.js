@@ -54,8 +54,34 @@ function TransportForm() {
           shipping_date: "",
         }}
         validate={(values) => {
-          // validate values here
           const errors = {};
+          const messages = {
+            from: "Location from required",
+            to: "Location to required",
+            airplane: "Airplane required",
+            shipping_date: "Shipping date required",
+            shipping_date_from_past: "Shipping date can't be from past",
+          };
+
+          const validationRequierd = (key, value) => {
+            if (!value) {
+              errors[key] = messages[key];
+            }
+          };
+
+          const validateShippingDate = (date) => {
+            if (new Date(date).setHours(23, 59, 59, 59) < new Date()) {
+              errors.shipping_date = messages.shipping_date_from_past;
+            }
+          };
+
+          for (const [key, value] of Object.entries(values)) {
+            if (key === "documents") { continue }
+            validationRequierd(key, value);
+          }
+
+          validateShippingDate(values.shipping_date)
+
           return errors;
         }}
         onSubmit={(values, { setStatus, setSubmitting }) => handleSubmit(values, setStatus, setSubmitting)}
