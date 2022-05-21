@@ -1,11 +1,12 @@
-import { Box, Grid } from '@mui/material'
-import { Formik, Form, Field } from 'formik'
+import { Box, Button, Grid } from '@mui/material'
+import { Formik, Form, Field, FieldArray } from 'formik'
 import { React, useState } from 'react'
 import MySelect from "./FormComponents/MySelect";
 import MyInput from "./FormComponents/MyInput";
 import SubmitButton from "./FormComponents/SubmitButton";
 import ErrorDialog from "./FormComponents/ErrorDialog";
 import MyDate from "./FormComponents/MyDate";
+import Cargo from './FormComponents/Cargo';
 
 function TransportForm() {
   const [open, setOpen] = useState(false);
@@ -35,6 +36,10 @@ function TransportForm() {
     { id: "Boeing 747", name: "Boeing 747", maxWeigth: 38 }
   ]
 
+  const typesOfCargo = [
+    { id: "normal", name: "normal" },
+    { id: "dangerous", name: "dangerous" }]
+
   const size = {
     xs: 12,
     sm: 6,
@@ -42,6 +47,15 @@ function TransportForm() {
     lg: 3,
     xl: 2,
   };
+
+  const cargoTemplate = () => {
+    const cargo = {
+      "name": "",
+      "weight": 0,
+      type: typesOfCargo[0].name,
+    }
+    return cargo
+  }
 
   return (
     <Box>
@@ -52,6 +66,7 @@ function TransportForm() {
           airplane: airplanes[0].id,
           documents: null,
           shipping_date: "",
+          cargos: [cargoTemplate()],
         }}
         validate={(values) => {
           const errors = {};
@@ -86,7 +101,7 @@ function TransportForm() {
         }}
         onSubmit={(values, { setStatus, setSubmitting }) => handleSubmit(values, setStatus, setSubmitting)}
         enableReinitialize={true}>
-        {({ isSubmitting, status }) => (
+        {({ isSubmitting, status, values }) => (
           <Form>
             <Grid container spacing={2}>
               <Grid item xs={size.xs} sm={size.sm} md={size.md} lg={size.lg} xl={size.xl}>
@@ -106,6 +121,24 @@ function TransportForm() {
               </Grid>
               <Grid item xs={size.xs} sm={size.sm} md={size.md} lg={size.lg} xl={size.xl}>
                 <SubmitButton isSubmitting={isSubmitting} status={status} />
+              </Grid>
+              <Grid item xs={12}>
+                <FieldArray
+                  name="cargos"
+                  render={array => (
+                    <div>
+                      {values.cargos && values.cargos.length > 0 ? (
+                        values.cargos.map((cargo, index) => (
+                          <Cargo array={array} cargo={cargo} index={index} typesOfCargo={typesOfCargo} cargoTemplate={cargoTemplate} key={index} />
+                        ))
+                      ) : (
+                        <Button variant="contained" color="primary" onClick={() => array.push(cargoTemplate())}>
+                          Add cargo
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                />
               </Grid>
             </Grid>
           </Form>
