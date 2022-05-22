@@ -33,8 +33,8 @@ function TransportForm() {
   };
 
   const airplanes = [
-    { id: "Airbus A380", name: "Airbus A380", maxWeigth: 35 },
-    { id: "Boeing 747", name: "Boeing 747", maxWeigth: 38 }
+    { id: "Airbus A380", name: "Airbus A380", maxWeight: 35000 },
+    { id: "Boeing 747", name: "Boeing 747", maxWeight: 38000 }
   ]
 
   const typesOfCargo = [
@@ -66,13 +66,14 @@ function TransportForm() {
           to: "",
           airplane: airplanes[0].id,
           documents: "",
+          fileList: [],
           shipping_date: "",
           cargos: [cargoTemplate()],
         }}
         validate={(values) => {
           // getting filelist because value is a fake path string
           const inputElement = document.getElementById("documents");
-          inputElement && inputElement.addEventListener("change", handleFiles, false);
+          inputElement && inputElement.addEventListener("input", handleFiles, false);
 
           function handleFiles() {
             const fileListForm = this.files;
@@ -80,7 +81,7 @@ function TransportForm() {
             values.fileList = fileListForm
           }
 
-          console.log(values)
+          // console.log(values)
           const errors = {};
           const messages = {
             from: "Location from required",
@@ -123,8 +124,23 @@ function TransportForm() {
                   if (value <= 0) {
                     errors[fieldName] = `${keyName} can't be non-negative`
                   }
+                  const maxWeight = airplanes.filter(a => a.name === values.airplane)[0].maxWeight
+                  if (value > maxWeight) {
+                    errors[fieldName] = `${keyName} can't be bigger than ${maxWeight}kg`
+                  }
                 }
 
+              }
+            }
+          }
+
+          const validateDocuments = (documents) => {
+            const allowedTypes = ["image/jpeg", "image/png", "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]
+
+            for (let i = 0, numFiles = documents.length; i < numFiles; i++) {
+              const file = documents[i];
+              if (!allowedTypes.includes(file.type)) {
+                errors["documents"] = `Wrong file type: ${file.type}`
               }
             }
           }
@@ -136,6 +152,7 @@ function TransportForm() {
 
           validateShippingDate(values.shipping_date)
           validateCargos(values.cargos)
+          validateDocuments(values.fileList)
 
           return errors;
         }}
