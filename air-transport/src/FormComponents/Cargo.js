@@ -10,7 +10,7 @@ import MySelect from './MySelect';
 
 function Cargo({ array, cargo, typesOfCargo, cargoTemplate, index, size }) {
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} paddingBottom={1}>
       <Grid item xs={size.xs} sm={size.sm} md={size.md} lg={size.lg} xl={size.xl}>
         <Field name={`cargos.${index}.name`} component={MyInput} labelText="Name" />
       </Grid>
