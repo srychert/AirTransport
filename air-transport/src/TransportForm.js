@@ -8,12 +8,39 @@ import MyDialog from "./FormComponents/MyDialog";
 import MyDate from "./FormComponents/MyDate";
 import Cargo from './FormComponents/Cargo';
 import FilesUpload from './FormComponents/FilesUpload';
+import axios from 'axios';
 
 function TransportForm() {
   const [open, setOpen] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const handleSubmit = (values, setStatus, setSubmitting, resetForm) => {
+  const handleSubmit = async (values, setStatus, setSubmitting, resetForm) => {
+    const formData = new FormData();
+    const { fileList, cargos, ...valuesToAppend } = values;
+
+    for (const [key, value] of Object.entries(valuesToAppend)) {
+      formData.append(key, value)
+    }
+
+    for (let i = 0, numFiles = fileList.length; i < numFiles; i++) {
+      const file = fileList[i];
+      formData.append("filesList", file)
+    }
+
+    formData.append("cargos", JSON.stringify(cargos))
+
+    await axios
+      .post("http://localhost:5000/api/form/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(response => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
     handleClose();
     setStatus({
       sent: true,
@@ -25,10 +52,10 @@ function TransportForm() {
 
     setTimeout(() => {
       setSubmitting(false);
-      resetForm();
+      // resetForm();
     }, 1000);
 
-    console.log(values);
+    // console.log(values);
   };
 
   const handleOpen = () => {
