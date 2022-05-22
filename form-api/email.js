@@ -9,8 +9,8 @@ async function email(bodyObj, files) {
     host: "smtp.mailtrap.io",
     port: 2525,
     auth: {
-      user: process.env.USER,
-      pass: process.env.PASS
+      user: process.env.USER_EMAIL,
+      pass: process.env.PASS_EMAIL
     }
   });
 
