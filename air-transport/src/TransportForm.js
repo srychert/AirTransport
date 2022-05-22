@@ -37,25 +37,25 @@ function TransportForm() {
       })
       .then(response => {
         console.log(response)
+        handleOpen();
+        setMsg(response.data.message);
+        setStatus({
+          sent: true,
+          msg: response.data.message,
+        });
+        setSubmitting(false);
+        resetForm();
       })
       .catch((error) => {
         console.error(error)
+        handleOpen();
+        setMsg(error.message ? error.message : "Error");
+        setStatus({
+          sent: false,
+          msg: error.message ? error.message : "Error",
+        });
+        setSubmitting(false);
       })
-    handleClose();
-    setStatus({
-      sent: true,
-      msg: "Success",
-    });
-
-    setMsg("Sent");
-    handleOpen();
-
-    setTimeout(() => {
-      setSubmitting(false);
-      // resetForm();
-    }, 1000);
-
-    // console.log(values);
   };
 
   const handleOpen = () => {
