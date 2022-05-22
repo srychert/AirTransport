@@ -4,7 +4,7 @@ import { React, useState } from 'react'
 import MySelect from "./FormComponents/MySelect";
 import MyInput from "./FormComponents/MyInput";
 import SubmitButton from "./FormComponents/SubmitButton";
-import ErrorDialog from "./FormComponents/ErrorDialog";
+import MyDialog from "./FormComponents/MyDialog";
 import MyDate from "./FormComponents/MyDate";
 import Cargo from './FormComponents/Cargo';
 import FilesUpload from './FormComponents/FilesUpload';
@@ -13,13 +13,20 @@ function TransportForm() {
   const [open, setOpen] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const handleSubmit = (values, setStatus, setSubmitting) => {
+  const handleSubmit = (values, setStatus, setSubmitting, resetForm) => {
     handleClose();
     setStatus({
       sent: true,
       msg: "Success",
     });
-    setSubmitting(false);
+
+    setMsg("Sent");
+    handleOpen();
+
+    setTimeout(() => {
+      setSubmitting(false);
+      resetForm();
+    }, 1000);
 
     console.log(values);
   };
@@ -77,7 +84,7 @@ function TransportForm() {
 
           function handleFiles() {
             const fileListForm = this.files;
-            console.log(fileListForm)
+            // console.log(fileListForm)
             values.fileList = fileListForm
           }
 
@@ -156,7 +163,7 @@ function TransportForm() {
 
           return errors;
         }}
-        onSubmit={(values, { setStatus, setSubmitting }) => handleSubmit(values, setStatus, setSubmitting)}
+        onSubmit={(values, { setStatus, setSubmitting, resetForm }) => handleSubmit(values, setStatus, setSubmitting, resetForm)}
         enableReinitialize={true}>
         {({ isSubmitting, status, values }) => (
           <Card raised sx={{ height: "100%" }}>
@@ -200,7 +207,7 @@ function TransportForm() {
           </Card>
         )}
       </Formik>
-      <ErrorDialog open={open} handleClose={handleClose} msg={msg} />
+      <MyDialog open={open} handleClose={handleClose} msg={msg} />
     </Box>
   )
 }

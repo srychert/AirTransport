@@ -1,12 +1,12 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import React from "react";
 
-function ErrorDialog({ open, handleClose, msg }) {
+function MyDialog({ open, handleClose, msg }) {
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Error</DialogTitle>
+      <DialogTitle>Info</DialogTitle>
       <DialogContent>
-        <DialogContentText>Error ocured form was not sent {msg}</DialogContentText>
+        <DialogContentText>{msg}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Ok</Button>
@@ -15,4 +15,4 @@ function ErrorDialog({ open, handleClose, msg }) {
   );
 }
 
-export default ErrorDialog;
+export default MyDialog;
